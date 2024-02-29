@@ -20,7 +20,7 @@
 
       body {
         background-color: #252525;
-        overflow: hidden;
+        overflow-x: hidden;
       }
 
       .navbar {
@@ -71,15 +71,22 @@
         align-items: center;
       }
 
+      
+
       a {
         color: white;
         text-decoration: none;
-        transition-duration: 0.4s;
+        /* transition-duration: 0.4s; */
       }
 
-      .list-container li a:hover {
+      /* a{
         filter: drop-shadow(0px 0px 3px #c8f560);
-      }
+      } */
+
+        .list-container li a:hover {
+          filter: drop-shadow(0px 0px 3px #c8f560);
+        }
+        
       .name {
         font-size: 2.5vh;
         font-weight: 700;
@@ -737,6 +744,10 @@
         transition-duration: 0.4s;
       }
 
+      .textareacomment {
+        width: 40vw;
+      }
+
       .submit-button {
         font-size: 18px;
         font-weight: 700;
@@ -856,19 +867,19 @@
           <a class="name" href="#1">Rafli.</a>
         </div>
         <ul class="list-container">
-          <li class="list-content home">
+          <li id="home" class="list-content home">
             <a id="home-button" href="#1">Home</a>
           </li>
-          <li class="list-content about"><a href="#2">About</a></li>
-          <li class="list-content skills"><a href="#3">Skills</a></li>
-          <li class="list-content contact"><a href="#4">Contact</a></li>
+          <li id="about" class="list-content about"><a href="#2">About</a></li>
+          <li id="skills" class="list-content skills"><a href="#3">Skills</a></li>
+          <li id="contact" class="list-content contact"><a href="#4">Contact</a></li>
         </ul>
       </div>
     </nav>
     <!-- End of navbar -->
 
     <!-- Start of Home section -->
-    <div id="1" class="home-container">
+    <div id="1" class="home-container contain">
       <div class="home-section">
         <div class="hero-section">
           <svg
@@ -976,7 +987,7 @@
     <!-- End of Home section -->
 
     <!-- Start of About Section -->
-    <div id="2" class="about-container">
+    <div id="2" class="about-container contain">
       <div class="about-text-container">
         <table border="0" cellspacing="0" cellpadding="0">
           <tr>
@@ -1048,7 +1059,7 @@
     <!-- End of About Section -->
 
     <!-- Start of Skills Section -->
-    <div id="3" class="skills-container">
+    <div id="3" class="skills-container contain">
       <div class="skill-collections">
         <div class="skill skill1">
           <img
@@ -1107,6 +1118,7 @@
         </div>
         <div class="skill skill6">
           <img
+            id="java-image"
             class="skill-java"
             src="https://www.vectorlogo.zone/logos/java/java-vertical.svg"
             alt="Java"
@@ -1176,7 +1188,7 @@
     <!-- End of Skills Section -->
 
     <!-- Start of Contact Section -->
-    <div id="4" class="contact-container">
+    <div id="4" class="contact-container contain">
       <div class="contact-header">
         <h1>Contact</h1>
       </div>
@@ -1608,6 +1620,55 @@
 
           window.open(url, "_blank");
         }
+      });
+    </script>
+    <script>
+      
+      document.addEventListener("DOMContentLoaded", () => {
+        const homeActive = document.getElementById('dev');
+        const aboutActive = document.getElementById('about-image');
+        const skillsActive =  document.getElementById('java-image');
+        const contactActive = document.getElementById('comment-input');
+
+        const home = document.getElementById('home');
+        const about = document.getElementById('about');
+        const skills = document.getElementById('skills');
+        const contact = document.getElementById('contact');
+
+        const elements = [homeActive,aboutActive,skillsActive,contactActive];
+        const lists = [home,about,skills,contact];
+        
+        const isInViewport = (element) => {
+          const rect = element.getBoundingClientRect();
+          return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <=
+              (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= 
+              (window.innerWidth || document.documentElement.clientWidth)
+          );
+        };
+
+        const onActive = () => {
+        elements.forEach((element, i) => {
+              const inViewport = isInViewport(element);
+
+              lists[i].style.filter = inViewport ? 'drop-shadow(0px 0px 3px #c8f560)' : 'none';
+            });
+        };
+
+          const throttledOnActive = () => {
+              let rafId;
+              return () => {
+                  if (rafId) {
+                      cancelAnimationFrame(rafId);
+                  }
+                  rafId = requestAnimationFrame(onActive);
+              };
+          };
+
+    window.addEventListener('scroll', throttledOnActive());
       });
     </script>
   </body>
